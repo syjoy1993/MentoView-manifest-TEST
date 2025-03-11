@@ -40,7 +40,7 @@ spec:
     - host: mentoview.site
       http:
         paths:
-          - path: /*
+          - path: /api/*
             pathType: ImplementationSpecific
             backend:
               service:
