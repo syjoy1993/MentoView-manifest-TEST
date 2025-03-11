@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: Service   
+metadata:
+  name: mv-be-app-service
+  labels:
+    app.kubernetes.io/name: mv-be
+    app.kubernetes.io/instance: mv-be
+    app.kubernetes.io/version: "1.0.0"
+spec:
+  selector:
+    app.kubernetes.io/name: mv-be
+    app.kubernetes.io/instance: mv-be
+  type: ClusterIP
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+    - name: prometheus
+      protocol: TCP
+      port: 9090
+      targetPort: 9090
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mv-be-ingress
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:194722398200:certificate/8e0cbec8-16d7-49af-9753-2e63a88691af
+    alb.ingress.kubernetes.io/success-codes: 200-399
+    alb.ingress.kubernetes.io/load-balancer-name: mentoview-ingress-alb
+    alb.ingress.kubernetes.io/group.name: mv-be
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+spec:
+  ingressClassName: alb
+  rules:
+    - host: mentoview.site
+      http:
+        paths:
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: mv-be-app-service
+                port:
+                  number: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mv-be-app-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mv-be
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mv-be
+    spec:
+      containers:
+      - name: mv-be-app-container
+        image: 727646470302.dkr.ecr.ap-northeast-2.amazonaws.com/t3-wbc-ecr:5258acc9856663b22d51056c6349b7966b8699c2
+        ports:
+          - protocol: TCP
+            containerPort: 8080
