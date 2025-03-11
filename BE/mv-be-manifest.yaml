@@ -1,23 +1,21 @@
 apiVersion: v1
 kind: Service   
-metadata:
-  name: mv-be-app-service
-  labels:
+metadata: 
+  name: mv-be-app-service # 다른 리소스가 이 이름으로 Service를 참조
+  labels: # 리소스에 태그를 추가하는 키-값, Deployment, Ingress가 이 태그를 기준으로 이 Serivce를 연결
     app.kubernetes.io/name: mv-be
     app.kubernetes.io/instance: mv-be
     app.kubernetes.io/version: "1.0.0"
-  # annotations:
-    # alb.ingress.kubernetes.io/target-type: ip # IP 기반 타겟 매칭
 spec:
-  selector:
+  selector: # 이 Service가 연결할 pod를 식별하는 레이블, 지정한 키-값이 pod의 레이블과 일치해야 됨
     app.kubernetes.io/name: mv-be
     app.kubernetes.io/instance: mv-be
-  type: ClusterIP
+  type: ClusterIP # Service가 노출되는 방식, ClusterIP는 기본값으로 클러스터 내부에서만 접근 가능
   ports:
-    - name: http
-      protocol: TCP
-      port: 8080
-      targetPort: 8080
+    - name: http # 포트의 논리적 이름
+      protocol: TCP # 사용할 통신 프로토콜
+      port: 8080 # 다른 리소스에서 이 Service에 접근할 때 사용할 포트
+      targetPort: 8080 # Pod 내에서 애플리케이션이 사용하는 포트
     - name: prometheus
       protocol: TCP
       port: 9090
@@ -27,8 +25,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: mv-be-ingress
-  annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
+  annotations: # AWS ALB와 관련된 설정을 추가하는 메타베이터
+    alb.ingress.kubernetes.io/scheme: internet-facing # ALB를 공개(internet-facing) 또는 내부(internal)로 설정
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:194722398200:certificate/8e0cbec8-16d7-49af-9753-2e63a88691af
@@ -36,19 +34,22 @@ metadata:
     alb.ingress.kubernetes.io/load-balancer-name: mentoview-ingress-alb
     alb.ingress.kubernetes.io/group.name: mv
     alb.ingress.kubernetes.io/target-type: ip # Pod의 노출된 IP가 Target Group에 매핑
-    alb.ingress.kubernetes.io/healthcheck-path: "/api/test"
+    alb.ingress.kubernetes.io/healthcheck-path: "/api/test" # ALB 타겟 그룹의 헬스 체크 경로
     # alb.ingress.kubernetes.io/healthcheck-interval-seconds: "20" # 헬스 체크 주기
     # alb.ingress.kubernetes.io/healthcheck-timeout-seconds: "10"
     # alb.ingress.kubernetes.io/healthcheck-port: "8080"
 spec:
-  ingressClassName: alb
-  rules:
-    - host: mentoview.site
+  ingressClassName: alb # 사용할 Ingress 컨트롤러 지정
+  rules: # host 및 path에 따라 트래픽을 라우팅하는 규칙 정의
+    - host: mentoview.site # 라우팅 규칙이 적용되는 도메인
       http:
         paths:
-          - path: /api/*
-            pathType: ImplementationSpecific
-            backend:
+          - path: /api # URL 경로 패턴(/api/*)으로 트래픽 매칭
+            pathType: Prefix
+            # Prefix: 경로기 지정된 값으로 시작하면 매칭(예: /api로 시작하는 모든 경로)
+            # Excant: 경로가 정확히 일치할 때만 매칭(예: /api)
+            # ImplementationSpecific: 경로 매칭은 Ingress 컨트롤러(AWS ALB, NGINX 등)의 구현 방식에 따라 결정
+            backend: # 트래픽을 전달할 대상 서비스와 포트
               service:
                 name: mv-be-app-service
                 port:
