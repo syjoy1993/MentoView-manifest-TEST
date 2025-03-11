@@ -35,6 +35,9 @@ metadata:
     alb.ingress.kubernetes.io/group.name: mv
     alb.ingress.kubernetes.io/ssl-redirect: '443'
     alb.ingress.kubernetes.io/healthcheck-path: "/api/test"
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "20" # 헬스 체크 주기
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: "10"
+    alb.ingress.kubernetes.io/healthcheck-port: "8080"
 spec:
   ingressClassName: alb
   rules:
