@@ -34,6 +34,7 @@ metadata:
     alb.ingress.kubernetes.io/load-balancer-name: mentoview-ingress-alb
     alb.ingress.kubernetes.io/group.name: mv
     alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/healthcheck-path: "/api/test"
 spec:
   ingressClassName: alb
   rules:
