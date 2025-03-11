@@ -6,8 +6,8 @@ metadata:
     app.kubernetes.io/name: mv-be
     app.kubernetes.io/instance: mv-be
     app.kubernetes.io/version: "1.0.0"
-  annotations:
-    alb.ingress.kubernetes.io/target-type: ip # IP 기반 타겟 매칭
+  # annotations:
+    # alb.ingress.kubernetes.io/target-type: ip # IP 기반 타겟 매칭
 spec:
   selector:
     app.kubernetes.io/name: mv-be
