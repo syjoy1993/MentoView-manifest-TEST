@@ -29,7 +29,7 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing # ALB를 공개(internet-facing) 또는 내부(internal)로 설정
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:194722398200:certificate/8e0cbec8-16d7-49af-9753-2e63a88691af
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:194722398200:certificate/75bec25f-8f2b-4bee-ab78-a342da07ddc1
     alb.ingress.kubernetes.io/success-codes: 200-399 # redirection response(302)을 반환하면서도 "정상" 상태로 간주되길 원한다면 300대까지 포함
     alb.ingress.kubernetes.io/load-balancer-name: mentoview-ingress-alb
     alb.ingress.kubernetes.io/group.name: mv # 동일한 group.name을 가진 ingress는 하나의 ALB로 관리
