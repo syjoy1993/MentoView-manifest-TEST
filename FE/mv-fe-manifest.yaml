@@ -64,7 +64,7 @@ spec:
     spec:
       containers:
       - name: mv-fe-app-container
-        image: 194722398200.dkr.ecr.ap-northeast-2.amazonaws.com/mentoview-repo:fe-1537cbe8d347a003ea2f37473fd064702451e67e
+        image: 194722398200.dkr.ecr.ap-northeast-2.amazonaws.com/mentoview-repo:fe-11ba8cdb6081cd8ce0b0fcae182bb8adc05ae6d2
         ports:
           - protocol: TCP
             containerPort: 80
