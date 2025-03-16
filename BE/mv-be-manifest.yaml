@@ -77,7 +77,7 @@ spec:
     spec:
       containers: # pod 내부에 실행될 컨테이너 목록
       - name: mv-be-app-container
-        image: 897729139176.dkr.ecr.ap-northeast-2.amazonaws.com/eks-app:be-f821ec860dbaf502bd512308a934ede3529a4cde
+        image: 897729139176.dkr.ecr.ap-northeast-2.amazonaws.com/eks-app:be-dc0dede8e01015ef53d929e0d3ccac60b88b363b
         env:
           - name: TZ
             value: "Asia/Seoul"
