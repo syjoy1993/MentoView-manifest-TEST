@@ -25,7 +25,7 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing # ALB를 공개(internet-facing) 또는 내부(internal)로 설정
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:897729139176:certificate/7585ff6d-4f13-4e73-b4b9-e0ad07d2bbca
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:194722398200:certificate/75bec25f-8f2b-4bee-ab78-a342da07ddc1
     alb.ingress.kubernetes.io/success-codes: 200-399
     alb.ingress.kubernetes.io/load-balancer-name: mentoview-ingress-alb
     alb.ingress.kubernetes.io/group.name: mv
@@ -35,7 +35,7 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-    - host: isaya.store
+    - host: mentoview.site
       http:
         paths:
           - path: /
@@ -64,7 +64,7 @@ spec:
     spec:
       containers:
       - name: mv-fe-app-container
-        image: 897729139176.dkr.ecr.ap-northeast-2.amazonaws.com/eks-app:fe-77839001cc371ccfb722f005739037d73730cc23
+        image: 194722398200.dkr.ecr.ap-northeast-2.amazonaws.com/mentoview-repo:fe-8ff8bb475f8066568e970fd9c27bf45f59e6c2cc
         ports:
           - protocol: TCP
             containerPort: 80
